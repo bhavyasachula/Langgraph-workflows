@@ -4,7 +4,7 @@ from langgraph.graph.message import add_messages
 from typing import TypedDict,Annotated,Literal
 from langchain_groq import ChatGroq
 from dotenv import load_dotenv
-from langchain_core.messages import BaseMessage,HumanMessage,SystemMessage
+from langchain_core.messages import BaseMessage,HumanMessage,SystemMessage,AIMessage
 from langgraph.checkpoint.memory import MemorySaver # Using this for Persistence
 load_dotenv()
 
@@ -20,7 +20,7 @@ llm = ChatGroq(model="openai/gpt-oss-120b")
 def chatbot(state:Chatbotstate):
     messages = state['messages']
     res =llm.invoke(messages)
-    return {'messages':[res.content]}
+    return {'messages': [AIMessage(content=res.content)]}
 
 graph.add_node("Chatbot",chatbot)
 graph.add_edge(START,"Chatbot")

@@ -6,14 +6,20 @@ def generatethread_id():
     return thread_id
 
 def resetchat():
-    thread_id = generatethread_id();
+    thread_id = generatethread_id()
     st.session_state['thread_id'] = thread_id
     addthreadid(st.session_state['thread_id'])
     st.session_state['message_history'] = []
-
+    
 def addthreadid(thread_id):
     if thread_id not in st.session_state['chat_threads']:
         st.session_state['chat_threads'].append(thread_id)
 
 def loadConversations(thread_id):
-    return chatbot.get_state(config={'configurable':{'thread_id':thread_id}}).values['messages'] 
+    state = chatbot.get_state(config={'configurable': {'thread_id': thread_id}})
+    
+    # Check if 'messages' exists in values; if not, return an empty list
+    if state.values and 'messages' in state.values:
+        return state.values['messages']
+    
+    return [] # Return empty list for brand new threads

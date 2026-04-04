@@ -32,7 +32,7 @@ if  st.sidebar.button("New chat"):
 
 st.sidebar.header("My Conversations")
     #displays the uuid for new chat
-for threadid in st.session_state['chat_threads'][::-1]:
+for threadid in st.session_state['chat_threads']:
     if st.sidebar.button(str(threadid)): # variable of for loop    
         st.session_state['thread_id'] = threadid
         messages = loadConversations(threadid)
@@ -40,9 +40,9 @@ for threadid in st.session_state['chat_threads'][::-1]:
         temp_msg = []
         for msg in messages:
             if isinstance(msg,HumanMessage):
-                role ="user"
+                role="user"
             elif isinstance(msg,AIMessage):
-                role="ai"
+                role="assistant"
             else:
                 continue
             temp_msg.append({"role":role,"content":msg.content})
@@ -68,11 +68,11 @@ if userinput:
     with st.chat_message("user"):
         st.text(userinput)
 
-    with st.chat_message("ai"):
+    with st.chat_message("assistant"):
             aimsg = st.write_stream(
             message_chunk.content for  message_chunk, metadata in chatbot.stream(
             {'messages':[HumanMessage(content=userinput)]},
             config=CONFIG,stream_mode="messages")
     )
               
-    st.session_state['message_history'].append({'role':'ai','content':aimsg})
+    st.session_state['message_history'].append({'role':'assistant','content':aimsg})
