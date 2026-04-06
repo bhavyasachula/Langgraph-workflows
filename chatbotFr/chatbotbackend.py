@@ -5,13 +5,14 @@ from typing import TypedDict,Annotated,Literal
 from langchain_groq import ChatGroq
 from dotenv import load_dotenv
 from langchain_core.messages import BaseMessage,HumanMessage,SystemMessage,AIMessage
-from langgraph.checkpoint.memory import MemorySaver # Using this for Persistence
+from langgraph.checkpoint.sqlite import SqliteSaver # Using this for Persistence
+import sqlite3
 load_dotenv()
-
+conn = sqlite3.connect(database="chatbot.db",check_same_thread=False)
 class Chatbotstate(TypedDict):
     messages:Annotated[list[BaseMessage],add_messages]
 
-checkpointer = MemorySaver() # call the function memorysaver() 
+checkpointer = SqliteSaver(conn=conn) # call the function memorysaver() 
 
 graph = StateGraph(Chatbotstate)
 
@@ -26,3 +27,11 @@ graph.add_node("Chatbot",chatbot)
 graph.add_edge(START,"Chatbot")
 graph.add_edge("Chatbot",END)
 chatbot = graph.compile(checkpointer=checkpointer) 
+
+def retrieval_of_threads():
+    allthreads = {
+    checkpoint.config['configurable']['thread_id']
+    for checkpoint in checkpointer.list(None) 
+    }
+     
+    return list(allthreads)

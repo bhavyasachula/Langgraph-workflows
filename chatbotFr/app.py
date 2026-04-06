@@ -32,8 +32,8 @@ if  st.sidebar.button("New chat"):
 
 st.sidebar.header("My Conversations")
     #displays the uuid for new chat
-for threadid in st.session_state['chat_threads']:
-    if st.sidebar.button(str(threadid)): # variable of for loop    
+for threadid in st.session_state['chat_threads'][::-1]:
+    if  st.sidebar.button(f"thread-{threadid}"):
         st.session_state['thread_id'] = threadid
         messages = loadConversations(threadid)
 
@@ -60,19 +60,31 @@ CONFIG = {'configurable':{
 userinput = st.chat_input("Ask anthing...")
 
 if userinput:
-
-    st.session_state['message_history'].append({
-        'role':'user',
-        "content":userinput
-        })
+    # Display user message immediately
     with st.chat_message("user"):
-        st.text(userinput)
+        st.markdown(userinput)
 
+    # Stream the assistant message
     with st.chat_message("assistant"):
-            aimsg = st.write_stream(
-            message_chunk.content for  message_chunk, metadata in chatbot.stream(
-            {'messages':[HumanMessage(content=userinput)]},
-            config=CONFIG,stream_mode="messages")
-    )
-              
-    st.session_state['message_history'].append({'role':'assistant','content':aimsg})
+        aimsg = st.write_stream(
+            message_chunk.content for message_chunk, metadata in chatbot.stream(
+                {'messages': [HumanMessage(content=userinput)]},
+                config=CONFIG,
+                stream_mode="messages"
+            ) if isinstance(message_chunk, AIMessage)
+        )
+    
+    # Sync session state with the database to prevent duplicate/mismatched replies
+    messages = loadConversations(st.session_state['thread_id'])
+    temp_msg = []
+    for msg in messages:
+        if isinstance(msg, HumanMessage):
+            role = "user"
+        elif isinstance(msg, AIMessage):
+            role = "assistant"
+        else:
+            continue
+        temp_msg.append({"role": role, "content": msg.content})
+    
+    st.session_state['message_history'] = temp_msg
+    st.rerun()
