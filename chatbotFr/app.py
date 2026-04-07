@@ -88,3 +88,7 @@ if userinput:
     
     st.session_state['message_history'] = temp_msg
     st.rerun()
+
+with st.expander("View Session State Detailed"):
+    for key, value in st.session_state.items():
+        st.write(f"**{key}**: {value}")
