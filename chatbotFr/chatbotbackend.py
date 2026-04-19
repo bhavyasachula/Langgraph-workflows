@@ -12,7 +12,7 @@ conn = sqlite3.connect(database="chatbot.db",check_same_thread=False)
 class Chatbotstate(TypedDict):
     messages:Annotated[list[BaseMessage],add_messages]
 
-checkpointer = SqliteSaver(conn=conn) # call the function memorysaver() 
+checkpointer = SqliteSaver(conn=conn) 
 
 graph = StateGraph(Chatbotstate)
 
