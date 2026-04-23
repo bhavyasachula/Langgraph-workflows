@@ -8,6 +8,6 @@ wheels/
 .env
 # Virtual environments
 .venv
+chatbot.db
 chatbot.db-wal
 chatbot.db-shm
-chatbot.db
