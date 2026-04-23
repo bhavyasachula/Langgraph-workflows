@@ -9,7 +9,8 @@ from langchain_core.messages import HumanMessage ,AIMessage
 import time
 import uuid
 from utils import generatethread_id,resetchat,addthreadid,loadConversations
-
+import os
+os.environ["TRANSFORMERS_VERBOSITY"] = "error"
 
 # """ Session----------------------------------Setup """
 if "message_history" not in st.session_state:
@@ -31,7 +32,7 @@ if  st.sidebar.button("New chat"):
     resetchat()
 
 st.sidebar.header("My Conversations")
-    #displays the uuid for new chat
+    #displays the uuid 
 for threadid in st.session_state['chat_threads'][::-1]:
     if  st.sidebar.button(f"thread-{threadid}"):
         st.session_state['thread_id'] = threadid
@@ -53,8 +54,15 @@ for threadid in st.session_state['chat_threads'][::-1]:
 for message in st.session_state["message_history"]:
     with st.chat_message(message['role']):
         st.text(message['content'])
+
+#Passing metadata for tracing in langsmith 
 CONFIG = {'configurable':{
-    'thread_id':st.session_state['thread_id']}} 
+
+    'thread_id':st.session_state['thread_id']},
+
+    'metadata':{'thread_id':st.session_state['thread_id']},
+    'run_name':'ChatbotFr',
+}  
 #Check:if replace with the generatethread_id function 
 
 userinput = st.chat_input("Ask anthing...")

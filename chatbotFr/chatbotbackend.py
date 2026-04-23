@@ -7,6 +7,9 @@ from dotenv import load_dotenv
 from langchain_core.messages import BaseMessage,HumanMessage,SystemMessage,AIMessage
 from langgraph.checkpoint.sqlite import SqliteSaver # Using this for Persistence
 import sqlite3
+import os
+os.environ['LANGCHAIN_PROJECT'] = "LANGGRAPh-LANGSMITH" # Set the LANGCHAIN_PROJECT environment variable
+
 load_dotenv()
 conn = sqlite3.connect(database="chatbot.db",check_same_thread=False)
 class Chatbotstate(TypedDict):
