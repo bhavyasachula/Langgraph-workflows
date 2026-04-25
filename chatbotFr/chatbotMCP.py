@@ -68,6 +68,7 @@ config={
 async def main():
     print("MCPServer tools : \n add expenses \n summarize \n list expenses")
     chatbot = await buildGraph()
+    
     response=await chatbot.ainvoke({"messages":[HumanMessage(content="list all the expenses from the month of january")]},config=config) # Example invocation to test the chatbot with a human message.
     print(response["messages"][-1].content) 
     
