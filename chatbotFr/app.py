@@ -74,14 +74,16 @@ if userinput:
 
     # Stream the assistant message
     with st.chat_message("assistant"):
-        aimsg = st.write_stream(
-            message_chunk.content for message_chunk, metadata in chatbot.stream(
+        def ai_only_stream():
+            for message_chunk, metadata in chatbot.stream(
                 {'messages': [HumanMessage(content=userinput)]},
                 config=CONFIG,
                 stream_mode="messages"
-            ) if isinstance(message_chunk, AIMessage)
-        )
-    
+            ): 
+                if isinstance(message_chunk, AIMessage) and message_chunk.content.strip():
+                    yield message_chunk.content
+                    
+        ai_message= st.write_stream(ai_only_stream())
     # Sync session state with the database to prevent duplicate/mismatched replies
     messages = loadConversations(st.session_state['thread_id'])
     temp_msg = []
