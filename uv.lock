@@ -835,6 +835,7 @@ dependencies = [
     { name = "langchain-openai" },
     { name = "langgraph" },
     { name = "langgraph-checkpoint-sqlite" },
+    { name = "opendataloader-pdf" },
     { name = "streamlit" },
 ]
 
@@ -849,6 +850,7 @@ requires-dist = [
     { name = "langchain-openai", specifier = ">=1.1.12" },
     { name = "langgraph", specifier = ">=1.1.2" },
     { name = "langgraph-checkpoint-sqlite", specifier = ">=3.0.3" },
+    { name = "opendataloader-pdf", specifier = ">=2.3.0" },
     { name = "streamlit", specifier = ">=1.55.0" },
 ]
 
@@ -1072,6 +1074,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/88/15/52580c8fbc16d0675d516e8749806eda679b16de1e4434ea06fb6feaa610/openai-2.30.0.tar.gz", hash = "sha256:92f7661c990bda4b22a941806c83eabe4896c3094465030dd882a71abe80c885", size = 676084, upload-time = "2026-03-25T22:08:59.96Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/2a/9e/5bfa2270f902d5b92ab7d41ce0475b8630572e71e349b2a4996d14bdda93/openai-2.30.0-py3-none-any.whl", hash = "sha256:9a5ae616888eb2748ec5e0c5b955a51592e0b201a11f4262db920f2a78c5231d", size = 1146656, upload-time = "2026-03-25T22:08:58.2Z" },
+]
+
+[[package]]
+name = "opendataloader-pdf"
+version = "2.3.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/94/89/7904cbff3befb0219b30486d80254409cb4f14b82364f7d7c763f3e4687f/opendataloader_pdf-2.3.0.tar.gz", hash = "sha256:4abb0737c70b6b6a42b04748945b598f3776d2af7bb26ed275ed1e1f26629ee2", size = 22474091, upload-time = "2026-04-21T12:16:04.512Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/5f/a4/e8b350bbea4f56d990dbf6b599c7cfb43c5ed3914b0d9efab6ac62c24474/opendataloader_pdf-2.3.0-py3-none-any.whl", hash = "sha256:1a6245d3f774dab2414ae759b1fc04edfad2f6e17b3c9f9b386b74a58604e20d", size = 22487135, upload-time = "2026-04-21T12:16:01.724Z" },
 ]
 
 [[package]]
