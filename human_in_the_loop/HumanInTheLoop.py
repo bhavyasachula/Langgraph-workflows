@@ -40,8 +40,6 @@ def purchase_stock(symbol:str,quantity:str):
     Human-in-the-loop:
     Before confirming this tool will interrupt 
     and wait for the human decision ("yes / anything else").
-    
-   
     """
     quantity = int(quantity)
     decision = interrupt(f"Approve buying {quantity} shares of {symbol}? yes/no");
@@ -78,8 +76,17 @@ graph = StateGraph(Chatbotstate)
 
 
 def chatbot(state:Chatbotstate):
+    system_msg = SystemMessage(content="""
+    You are a stock trading assistant.
+
+    Rules:
+    - If a tool is called, always use its result to respond.
+    - Do NOT say you cannot perform the task.
+    - If purchase_stock succeeds, confirm the purchase clearly.
+    """)
     messages = state['messages']
-    res =llm_tools.invoke(messages)
+     
+    res =llm_tools.invoke([system_msg] + messages) # Pass the system message along with the conversation history to the llm with tools.
     return {'messages': [res]}
 
 graph.add_node("Chatbot",chatbot)
@@ -121,14 +128,14 @@ while True:
     if interrupt_data:
             prompt_to_human = interrupt_data[0].value
             print(f"HITL:{prompt_to_human}")
-            decision = input("Your decision").lower()
+            decision = input("Your decision :").lower()
             result = chatbot.invoke(
             Command(resume=decision),
             config={"configurable":{
             "thread_id":thread
         }}
     )
-
+            
     messages = result["messages"]
     last_msg = messages[-1]
     print(f"Ai :{last_msg.content}\n");
