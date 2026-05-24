@@ -33,3 +33,21 @@ subgraph_builder.add_edge("translate_text",END)
 
 subgraph = subgraph_builder.compile()
 
+def generate_answer(state:ParentState):
+
+    answer= parentLLm.invoke(f"You are a helpfull assistant. Answer Clearly \n  {state['question']}").content 
+    return {"answer_eng":answer} 
+
+parent_builder = StateGraph(ParentState)
+
+parent_builder.add_node("generate_answer",generate_answer);
+parent_builder.add_node("translate_hindi",subgraph)
+parent_builder.add_edge(START,"generate_answer")
+parent_builder.add_edge("generate_answer","translate_hindi")
+parent_builder.add_edge("translate_hindi",END)
+
+parentgraph = parent_builder.compile()
+
+parentgraph.invoke({"question":"Wht is quantum physics"})
+
+
