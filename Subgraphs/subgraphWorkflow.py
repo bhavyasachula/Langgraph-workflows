@@ -49,6 +49,6 @@ parent_builder.add_edge("translate_hindi",END)
 
 parentgraph = parent_builder.compile()
 
-parentgraph.invoke({"question":"Wht is quantum physics"})
+print(parentgraph.invoke({"question":"Wht is quantum physics"}))
 
 
