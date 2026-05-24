@@ -84,9 +84,11 @@ def chatbot(state:Chatbotstate):
     - Do NOT say you cannot perform the task.
     - If purchase_stock succeeds, confirm the purchase clearly.
     """)
+
     messages = state['messages']
      
     res =llm_tools.invoke([system_msg] + messages) # Pass the system message along with the conversation history to the llm with tools.
+    
     return {'messages': [res]}
 
 graph.add_node("Chatbot",chatbot)
