@@ -13,7 +13,7 @@ class ParentState(TypedDict):
 parentLLm = ChatGroq(model="openai/gpt-oss-120b")
 subgraphLLm = ChatGroq(model="openai/gpt-oss-120b")
 
-def translate_text(state:StateGraph):
+def translate_text(state:ParentState):
     
     prompt = f"""Translate this following text into hindi language
     keep it natural , Do not add anything extra.
@@ -22,7 +22,7 @@ def translate_text(state:StateGraph):
     """
     answer = subgraphLLm.invoke(prompt).content
 
-    return {'answer_hindi':answer}
+    return {'answer_hin':answer}
 
 subgraph_builder = StateGraph(ParentState);
 
@@ -42,6 +42,7 @@ parent_builder = StateGraph(ParentState)
 
 parent_builder.add_node("generate_answer",generate_answer);
 parent_builder.add_node("translate_hindi",subgraph)
+
 parent_builder.add_edge(START,"generate_answer")
 parent_builder.add_edge("generate_answer","translate_hindi")
 parent_builder.add_edge("translate_hindi",END)
